@@ -159,8 +159,8 @@ def process_payroll(run_id):
         return error_response("Only approved payrolls can be processed", 422)
     run.status = "processing"
     db.session.commit()
-    from app.tasks.payroll_tasks import process_payroll_task
-    process_payroll_task.delay(run_id)
+    from app.tasks.payroll_tasks import process_payroll_task_fn
+    process_payroll_task_fn(run_id)
     log_action(user_id, "PROCESS_PAYROLL", "payroll_run", run.id)
     return success_response({"message": "Payroll processing started", "status": "processing"})
 
